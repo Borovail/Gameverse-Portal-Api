@@ -1,6 +1,5 @@
 ﻿using Back_End.Data;
-using Back_End.Models;
-using Back_End.Models.BugModels;
+using Back_End.Models.BugModes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +26,7 @@ namespace Back_End.Controllers
         }
 
 
-        // GET: api/<BugController>
+        // GET: api/bug
         [HttpGet]
         public async Task<IActionResult> GetBugsAsync()
         {
@@ -38,7 +37,7 @@ namespace Back_End.Controllers
             return Ok(bugs);
         }
 
-        // GET api/<BugController>/5
+        // GET api/bug/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBugByIdAsync(string id)
         {

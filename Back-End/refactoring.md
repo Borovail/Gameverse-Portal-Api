@@ -3,7 +3,7 @@ Need to add Global Error Handling
 Need to use mapper for mapping objects( create custom or  use library AutoMapper)
 
 
-
+Add a bit of comments  to the controllers and models
 
 //uncomment  when  authentication is implemented
 files: ApiDbContext:OnModelCreating, BugModel, BugController: CreateBug

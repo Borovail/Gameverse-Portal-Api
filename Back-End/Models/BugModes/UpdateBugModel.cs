@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Back_End.Models.BugModels
+namespace Back_End.Models.BugModes
 {
     public class UpdateBugModel
     {

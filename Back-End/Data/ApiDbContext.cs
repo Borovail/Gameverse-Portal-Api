@@ -1,4 +1,4 @@
-﻿using Back_End.Models.BugModels;
+﻿using Back_End.Models.BugModes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
