@@ -19,6 +19,7 @@ namespace Back_End
             {
                   new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                    new(ClaimTypes.NameIdentifier,userId),
+                   new(ClaimTypes.Role,"Admin")
             };
 
 

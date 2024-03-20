@@ -25,6 +25,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApiDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("UserAccess", policy => policy.RequireRole("User", "Developer", "Admin"));
+    options.AddPolicy("DeveloperAccess", policy => policy.RequireRole("Developer", "Admin"));
+    options.AddPolicy("AdminAccess", policy => policy.RequireRole("Admin"));
+});
+
 
 //Setting up JWT authentication
 builder.Services.AddAuthentication(options =>
@@ -43,7 +50,7 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        //RoleClaimType = ClaimTypes.Role
+        RoleClaimType = ClaimTypes.Role
     };
 
     options.Events = new JwtBearerEvents
@@ -59,12 +66,10 @@ builder.Services.AddAuthentication(options =>
             if (failure != null)
             {
                 resultJson = JsonSerializer.Serialize(failure.Message);
-            }
-            else
-            {
-                resultJson = JsonSerializer.Serialize("You are not authorized.");
+                await Console.Out.WriteLineAsync(resultJson);  // replace this stuff with logger  when it will be extracted to extention
             }
 
+            resultJson = JsonSerializer.Serialize("You are not authorized.");
             await context.Response.WriteAsync(resultJson);
         },
         OnForbidden = async context =>

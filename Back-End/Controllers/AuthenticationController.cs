@@ -71,7 +71,7 @@ namespace Back_End.Controllers
 
 
         //cant be implemented until jwt is implemented
-        [Authorize]
+        [Authorize(Policy ="AdminAccess")]
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteAccount()
         {
