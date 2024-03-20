@@ -15,6 +15,7 @@ namespace Back_End.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<BugModel>()
                 .Property(b => b.CreatedAt)
                 .HasDefaultValueSql("GETUTCDATE()"); // For SQL Server
