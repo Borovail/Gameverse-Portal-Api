@@ -7,3 +7,12 @@ Add a bit of comments  to the controllers and models
 
 //uncomment  when  authentication is implemented
 files: ApiDbContext:OnModelCreating, BugModel, BugController: CreateBug
+
+
+
+
+/// как улучшить  аунтефикацию
+вход как гость реализовать возможность вібора генерировать пароль или  сделать без  пароля
+
+
+///  улучшить модели  логина и регистра  с помощью валидационных атрибутов
