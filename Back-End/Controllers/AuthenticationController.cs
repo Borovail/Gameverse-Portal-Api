@@ -1,19 +1,23 @@
 ﻿using Back_End.Models.AuthModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Back_End.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly JwtTokenService _tokenService;
 
-        public AuthenticationController(UserManager<IdentityUser> userManager)
+        public AuthenticationController(UserManager<IdentityUser> userManager, JwtTokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
 
@@ -25,29 +29,26 @@ namespace Back_End.Controllers
             if (model.Name == null && model.Email == null)
                 return BadRequest("Please provide a username or email address.");
 
-            IdentityUser identityUser;
+            IdentityUser user;
 
             if (model.Name != null)
-                identityUser = await _userManager.FindByNameAsync(model.Name);
+                user = await _userManager.FindByNameAsync(model.Name);
             else
-                identityUser = await _userManager.FindByEmailAsync(model.Email);
+                user = await _userManager.FindByEmailAsync(model.Email);
 
 
-            if (identityUser == null)
+            if (user == null)
                 return NotFound($"A user registration with email address: [{model.Email}] could not be found.");
 
-            if (await _userManager.CheckPasswordAsync(identityUser, model.Password) == false)
+            if (await _userManager.CheckPasswordAsync(user, model.Password) == false)
                 return NotFound("The password provided is incorrect.");
 
 
-            //cant be implemented until jwt is implemented
             //var roles = await _userManager.GetRolesAsync(user);
 
-            //var token = _tokenService.GenerateToken(user, roles.ToArray());
+            var token = _tokenService.GenerateToken(user.Id);
 
-            //return OperationResult.CreateSuccessResult(data: token);
-
-            return Ok("Login successful");
+            return Ok($"Login successful!\n your token:{token}");
         }
 
 
@@ -57,32 +58,38 @@ namespace Back_End.Controllers
             var user = new IdentityUser { UserName = model.Name, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            if (result.Succeeded)
-                return Ok("Registration successful!");
-            else
-                return BadRequest(result.Errors);
+            if (!result.Succeeded) return BadRequest(result.Errors);
 
 
-            //cant be implemented until jwt is implemented
-            //if (result.Succeeded)
-            //{
-            //    var token = _tokenService.GenerateToken(user);
 
-            //    return OperationResult.CreateSuccessResult(data: token);
-            //}
+            var token = _tokenService.GenerateToken(user.Id);
 
-            //return OperationResult.CreateFailureResult(errors: result.Errors.Select(e => e.Description).ToList(), "Registration failed");
+            return Ok($"Registration successful!\n your token:{token}");
+
 
         }
 
 
         //cant be implemented until jwt is implemented
-        //[HttpDelete("delete")]
-        //public async Task<IActionResult> DeleteAccount()
-        //{
-        //}
+        [Authorize]
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) 
+                return NotFound("User is not found. If you think this is an error, please contact support or make sure you already have an account.");
 
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+                return Ok("Your account has been deleted.");
+            else
+                return BadRequest(result.Errors);
+        }
+
+        [Authorize]
         [HttpGet("get-users")]
         public async Task<IActionResult> GetUsers()
         {
