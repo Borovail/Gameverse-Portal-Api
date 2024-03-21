@@ -1,5 +1,6 @@
 ﻿using Back_End.Data;
 using Back_End.Models.BugModes;
+using Back_End.Services.Interfaces;
 using Back_End.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,95 +17,56 @@ namespace Back_End.Controllers
         /// optimize using of SaveChangesAsync
         /// </summary>
 
+        private readonly IBugService _bugService;
 
-        private readonly ApiDbContext _apiDbContext;
-        private readonly UserManager<IdentityUser> _userManager;
-
-        public BugController(ApiDbContext apiDbContext, UserManager<IdentityUser> userManager)
+        public BugController(IBugService bugService)
         {
-            _apiDbContext = apiDbContext;
-            _userManager = userManager;
+            _bugService = bugService;
         }
-
 
         // GET: api/bug
         [HttpGet]
-        public async Task<IActionResult> GetBugsAsync()
+        public async Task<IActionResult> GetBugs()
         {
-            var bugs = await _apiDbContext.Bugs.ToListAsync();
+            var result =await _bugService.GetBugsAsync();
 
-            if (bugs == null) return NotFound();
-
-            var response = ServiceResult<List<BugModel>>.SuccessResult(bugs);
-
-            return StatusCode(response.StatusCode, response.GetResult());
+            return StatusCode(result.StatusCode, result.Data);
         }
 
         // GET api/bug/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBugByIdAsync(string id)
+        public async Task<IActionResult> GetBugById(string id)
         {
-            var bug = await _apiDbContext.Bugs.FirstOrDefaultAsync(i => i.Id == id);
+            var result = await _bugService.GetBugByIdAsync(id);
 
-            if (bug == null) return NotFound();
-
-            return Ok(bug);
+            return StatusCode(result.StatusCode, result.Data);
         }
 
         // POST api/<BugController>
         [HttpPost]
         public async Task<IActionResult> CreateBug([FromBody] CreateBugModel bugModel)
         {
-            BugModel bug = new BugModel
-            {
-                Title = bugModel.Title,
-                Description = bugModel.Description,
-                Status = bugModel.Status,
-            };
+            var result = await _bugService.CreateBug(bugModel);
 
-            //uncomment  when  authentication is implemented
-            //bug.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            await _apiDbContext.Bugs.AddAsync(bug);
-            await _apiDbContext.SaveChangesAsync();
-
-            return Ok();
+            return StatusCode(result.StatusCode, result.Data);
         }
 
         // PUT api/<BugController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBug(string id, [FromBody] UpdateBugModel updateBugModel)
         {
-            var bug = await _apiDbContext.Bugs.FirstOrDefaultAsync(i => i.Id == id);
+            var result = await _bugService.UpdateBug(id, updateBugModel);
 
-            if (bug == null) return NotFound();
-
-
-            bug.Title = updateBugModel.Title ?? bug.Title;
-            bug.Description = updateBugModel.Description ?? bug.Description;
-            bug.Status = updateBugModel.Status ?? bug.Status;
-
-            _apiDbContext.Bugs.Update(bug);
-            await _apiDbContext.SaveChangesAsync();
-
-            return Ok();
-
+            return StatusCode(result.StatusCode, result.Data);
         }
 
         // DELETE api/<BugController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBug(string id)
         {
-            var bug = await _apiDbContext.Bugs.FirstOrDefaultAsync(i => i.Id == id);
+            var result = await _bugService.DeleteBug(id);
 
-            if (bug == null) return NotFound();
-
-
-            _apiDbContext.Bugs.Remove(bug);
-            await _apiDbContext.SaveChangesAsync();
-
-            return Ok();
-
+            return StatusCode(result.StatusCode, result.Data);
         }
     }
 }

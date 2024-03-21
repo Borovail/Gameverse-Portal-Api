@@ -2,31 +2,33 @@
 
 namespace Back_End.Utils
 {
-    public class ServiceResult<T>
+    public class ServiceResult
     {
-        public int StatusCode { get;private set; }
-        private T? Data { get; set; }
-        public string? Message { get; private set; }
+        private int statusCode;
 
-        public static ServiceResult<T> SuccessResult(T? data = default, string message = "", int statusCode = 200)
+        public int StatusCode
         {
-            return new ServiceResult<T> { StatusCode = statusCode, Data = data, Message = message };
+            get { return statusCode; }
+            set { statusCode = value; }
         }
 
-        public static ServiceResult<object> FailureResult(int statusCode, string message, object? errors = null)
+        private object? data;
+
+        public object? Data
         {
-            return new ServiceResult<object> { StatusCode = statusCode, Message = message, Data = errors };
+            get { return data; }
+            set { data = value; }
         }
 
-        public string ToJson()
+
+        public static ServiceResult SuccessResult<T>(T? data = default, int statusCode = 200)
         {
-            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-            return JsonSerializer.Serialize(this, options);
+            return new ServiceResult { Data = data,StatusCode = statusCode };
         }
 
-        public T GetResult()
+        public static ServiceResult FailureResult<T>(T? errors = default, int statusCode = 400)
         {
-            return Data;
+            return new ServiceResult { Data = errors,StatusCode = statusCode };
         }
     }
 }
