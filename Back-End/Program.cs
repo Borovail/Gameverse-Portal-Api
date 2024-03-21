@@ -6,9 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using System.Security.Claims;
 using System.Text;
-using Back_End;
-using Api.Middleware;
 using Microsoft.AspNetCore.Mvc;
+using Back_End.Middleware;
+using Back_End.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 

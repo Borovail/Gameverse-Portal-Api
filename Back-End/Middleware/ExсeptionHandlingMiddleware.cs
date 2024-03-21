@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Api.Middleware
+namespace Back_End.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
@@ -19,10 +19,10 @@ namespace Api.Middleware
             {
                 await _next(httpContext);
             }
-            catch(KeyNotFoundException ex)
+            catch (KeyNotFoundException ex)
             {
                 LogError(ex, "Key not found");
-                await HandleException(httpContext,HttpStatusCode.NotFound,"Key not found");
+                await HandleException(httpContext, HttpStatusCode.NotFound, "Key not found");
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace Api.Middleware
         }
 
         private async Task HandleException(HttpContext httpContext,
-            HttpStatusCode httpStatusCode ,string message)
+            HttpStatusCode httpStatusCode, string message)
         {
 
             var response = httpContext.Response;
