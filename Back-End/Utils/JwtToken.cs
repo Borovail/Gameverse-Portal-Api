@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Back_End.Utils
 {
-    public class JwtTokenService
+    public class JwtToken
     {
         private readonly IConfiguration _configuration;
-        public JwtTokenService(IConfiguration configuration)
+        public JwtToken(IConfiguration configuration)
         {
             _configuration = configuration;
         }

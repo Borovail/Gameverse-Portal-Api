@@ -1,5 +1,6 @@
 ﻿using Back_End.Data;
 using Back_End.Models.BugModes;
+using Back_End.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,9 @@ namespace Back_End.Controllers
 
             if (bugs == null) return NotFound();
 
-            return Ok(bugs);
+            var response = ServiceResult<List<BugModel>>.SuccessResult(bugs);
+
+            return StatusCode(response.StatusCode, response.GetResult());
         }
 
         // GET api/bug/5

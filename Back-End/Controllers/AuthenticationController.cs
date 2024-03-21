@@ -1,4 +1,6 @@
-﻿using Back_End.Models.AuthModels;
+﻿using Back_End.Extensions;
+using Back_End.Middleware;
+using Back_End.Models.AuthModels;
 using Back_End.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,9 +15,9 @@ namespace Back_End.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly JwtTokenService _tokenService;
+        private readonly JwtToken _tokenService;
 
-        public AuthenticationController(UserManager<IdentityUser> userManager, JwtTokenService tokenService)
+        public AuthenticationController(UserManager<IdentityUser> userManager, JwtToken tokenService)
         {
             _userManager = userManager;
             _tokenService = tokenService;
@@ -129,3 +131,4 @@ namespace Back_End.Controllers
 
     }
 }
+

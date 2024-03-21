@@ -1,19 +1,19 @@
-using Back_End.Middleware;
+﻿using Back_End.Middleware;
 using Back_End.Utils;
 using Back_End.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Registering custom JWT token service
-builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<JwtToken>();
 
 // Adding custom service extensions to the container
 builder.Services
-    .AddJwtAuthentication(builder.Configuration) // Adding JWT authentication
-    .AddAuthorizationPolicies() // Adding custom authorization policies
-    .AddCorsPolicy() // Configuring CORS policy
     .AddDbConfiguration(builder.Configuration) // Configuring DbContext
-    .AddIdentityConfiguration(); // Configuring Identity
+    .AddIdentityConfiguration() // Configuring Identity
+    .AddAuthorizationPolicies() // Adding custom authorization policies
+    .AddJwtAuthentication(builder.Configuration) // Adding JWT authentication
+    .AddCorsPolicy(); // Configuring CORS policy
 
 // Adding controllers to the service container
 builder.Services.AddControllers();
@@ -23,6 +23,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer(); // Required for Swagger
 
 var app = builder.Build();
+
 
 // Configuring the HTTP request pipeline
 if (app.Environment.IsDevelopment())

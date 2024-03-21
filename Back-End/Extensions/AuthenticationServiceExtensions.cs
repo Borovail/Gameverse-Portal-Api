@@ -14,21 +14,18 @@ namespace Back_End.Extensions
             var authenticationBuilder = services.AddAuthenticationSchemes();
 
             authenticationBuilder
-                .AddJwtBearerConfiguration(configuration)
-                .AddJwtBearerEventsConfiguration();
+               .AddJwtBearerConfiguration(configuration);
 
             return services;
         }
 
         private static AuthenticationBuilder AddAuthenticationSchemes(this IServiceCollection services)
         {
-            services.AddAuthentication(options =>
+            return services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             });
-
-            return services.AddAuthentication();
         }
 
         private static AuthenticationBuilder AddJwtBearerConfiguration(this AuthenticationBuilder builder, IConfiguration configuration)
@@ -44,21 +41,23 @@ namespace Back_End.Extensions
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
                 };
-            });
 
-            return builder;
-        }
-
-
-        private static AuthenticationBuilder AddJwtBearerEventsConfiguration(this AuthenticationBuilder builder)
-        {
-            builder.AddJwtBearer(options =>
-            {
                 options.Events = new JwtBearerEvents
                 {
                     OnChallenge = async context =>
                     {
                         context.HandleResponse();
+                        await Console.Out.WriteLineAsync("OnChallenge");
+
+                        var failure = context.AuthenticateFailure;
+
+                        if (failure != null)
+                        {
+                            var serviceProvider = builder.Services.BuildServiceProvider();
+                            var logger = serviceProvider.GetRequiredService<ILogger>();
+                            logger.LogError($"Authentication failed: {failure.Message}");
+                        }
+
                         var result = new
                         {
                             Success = false,
@@ -71,6 +70,8 @@ namespace Back_End.Extensions
                     },
                     OnForbidden = async context =>
                     {
+                        await Console.Out.WriteLineAsync("OnForbidden");
+
                         var result = new
                         {
                             Success = false,
@@ -88,7 +89,7 @@ namespace Back_End.Extensions
         }
 
 
-
+     
 
     }
 }
