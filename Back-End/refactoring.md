@@ -16,3 +16,5 @@ files: ApiDbContext:OnModelCreating, BugModel, BugController: CreateBug
 
 
 ///  улучшить модели  логина и регистра  с помощью валидационных атрибутов
+
+оптимизировать сейв ченджес
