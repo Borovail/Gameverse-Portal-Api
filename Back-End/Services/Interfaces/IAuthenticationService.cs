@@ -9,6 +9,6 @@ namespace Back_End.Services.Interfaces
 
         Task <ServiceResult> Register(RegisterModel model);
 
-        Task <ServiceResult> RegisterAsGuest(string? Nickname);
+        Task <ServiceResult> RegisterAsGuest(string? Nickname = null);
     }
 }

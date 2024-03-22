@@ -9,17 +9,15 @@ namespace Back_End.Services.Interfaces
 
         Task<ServiceResult> GetMyBugs();
 
-        Task<ServiceResult> GetUsersBugs(string userId);
+        Task<ServiceResult> GetUsersBugs(IReadOnlyList<string> userIds);
 
-        Task<ServiceResult> GetBugByIdAsync(string id);
+        Task<ServiceResult> GetBugByIdAsync(IReadOnlyList<string> bugIds);
 
         Task<ServiceResult> CreateBug(CreateBugModel bugModel);
 
         Task<ServiceResult> UpdateBug(string id, UpdateBugModel bugModel);
 
-        Task<ServiceResult> DeleteBug(string id);
-
-        Task<ServiceResult> DeleteBugs(params int[] id);
+        Task<ServiceResult> DeleteBugs(IReadOnlyList<string> ids);
 
         Task<ServiceResult> DeleteAllBugs();
     }
