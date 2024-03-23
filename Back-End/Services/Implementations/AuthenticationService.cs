@@ -37,7 +37,9 @@ namespace Back_End.Services.Implementations
             if (user == null)
                 return ServiceResult.FailureResult(message, 404);
 
-            var token = _tokenService.GenerateToken(user.Id);
+            var roles=  _userManager.GetRolesAsync(user).Result.ToArray();
+
+            var token = _tokenService.GenerateToken(user.Id,roles);
 
             return ServiceResult.SuccessResult(token);
 
@@ -50,7 +52,7 @@ namespace Back_End.Services.Implementations
 
             if (!result.Succeeded) return ServiceResult.FailureResult(result.Errors);
 
-            var token = _tokenService.GenerateToken(user.Id);
+            var token = _tokenService.GenerateToken(user.Id,"User");
 
             return ServiceResult.SuccessResult(token);
         }

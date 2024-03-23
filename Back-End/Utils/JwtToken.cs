@@ -13,7 +13,7 @@ namespace Back_End.Utils
             _configuration = configuration;
         }
 
-        public string GenerateToken(string userId/*, params string[] roles*/)
+        public string GenerateToken(string userId, params string[] roles)
         {
             var claims = new List<Claim>
             {
@@ -23,7 +23,7 @@ namespace Back_End.Utils
             };
 
 
-            //claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

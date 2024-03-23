@@ -5,12 +5,12 @@ namespace Back_End.Services.Implementations
 {
     public class AccessService : IAccessService
     {
-        public async Task<ServiceResult> GrantRoles(IReadOnlyList<string> userIds, params string[] roleNames)
+        public Task<ServiceResult> GrantRole(string userId, params string[] roleNames)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResult> RevokeRoles(IReadOnlyList<string> userIds, params string[] roleNames)
+        public Task<ServiceResult> RevokeRole(string userId, params string[] roleNames)
         {
             throw new NotImplementedException();
         }

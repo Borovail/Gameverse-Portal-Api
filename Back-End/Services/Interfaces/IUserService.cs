@@ -10,8 +10,6 @@ namespace Back_End.Services.Interfaces
 
 
         Task<ServiceResult> DeleteUserAsync(string id);
-        Task<ServiceResult> DeleteUsersAsync(IReadOnlyList<string> ids);
-        
 
         Task<ServiceResult> CreateUserAsync(RegisterModel model);
 

@@ -33,7 +33,7 @@ namespace Back_End.Services.Implementations
             return ServiceResult.SuccessResult("Success");
         }
 
-        public async Task<ServiceResult> DeleteAllBugs()
+        public Task<ServiceResult> DeleteAllBugs()
         {
             throw new NotImplementedException();
         }
@@ -50,11 +50,6 @@ namespace Back_End.Services.Implementations
 
           
             return ServiceResult.SuccessResult("Success");
-        }
-
-        public async Task<ServiceResult> DeleteBugs(params int[] id)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ServiceResult> GetBugByIdAsync(string id)
@@ -77,12 +72,12 @@ namespace Back_End.Services.Implementations
             return ServiceResult.SuccessResult(bugs);
         }
 
-        public async Task<ServiceResult> GetMyBugs()
+        public Task<ServiceResult> GetMyBugs()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResult> GetUsersBugs(string userId)
+        public Task<ServiceResult> GetUserBug(string userId)
         {
             throw new NotImplementedException();
         }
