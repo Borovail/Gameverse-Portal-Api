@@ -21,11 +21,15 @@ namespace Back_End.Data
                 .HasDefaultValueSql("GETUTCDATE()"); // For SQL Server
 
 
-            //uncomment  when  authentication is implemented
-            //modelBuilder.Entity<BugModel>()
-            //        .HasOne(b => b.User)
-            //         .WithMany() 
-            //           .HasForeignKey(b => b.UserId);
+            modelBuilder.Entity<BugModel>()
+            .HasIndex(b => b.Title)
+            .IsUnique();
+
+
+            modelBuilder.Entity<BugModel>()
+                    .HasOne(b => b.User)
+                     .WithMany()
+                       .HasForeignKey(b => b.UserId);
         }
 
         public DbSet<BugModel> Bugs { get; set; }
