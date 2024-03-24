@@ -24,20 +24,20 @@ namespace Back_End.Services.Implementations
             if (model.Login.Contains("@"))
             {
                 user = await _userManager.FindByEmailAsync(model.Login);
-                if (user == null) message = $"User with email {model.Login} not found";
-
+                if (user == null)
+                    return ServiceResult.FailureResult($"User with email {model.Login} not found", 404);
             }
             else
             {
                 user = await _userManager.FindByNameAsync(model.Login);
-                if (user == null) message = $"User with name {model.Login} not found";
+                if (user == null)
+                    return ServiceResult.FailureResult($"User with name {model.Login} not found", 404);
             }
 
 
-            if (user == null)
-                return ServiceResult.FailureResult(message, 404);
+            var roles = _userManager.GetRolesAsync(user).Result.ToArray();
 
-            var token = _tokenService.GenerateToken(user.Id);
+            var token = _tokenService.GenerateToken(user.Id, roles);
 
             return ServiceResult.SuccessResult(token);
 
@@ -50,7 +50,7 @@ namespace Back_End.Services.Implementations
 
             if (!result.Succeeded) return ServiceResult.FailureResult(result.Errors);
 
-            var token = _tokenService.GenerateToken(user.Id);
+            var token = _tokenService.GenerateToken(user.Id, "User");
 
             return ServiceResult.SuccessResult(token);
         }

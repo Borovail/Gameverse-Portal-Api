@@ -4,8 +4,8 @@ namespace Back_End.Services.Interfaces
 {
     public interface IAccessService
     {
-        Task<ServiceResult> GrantRoles(IReadOnlyList<string> userIds,params string[] roleNames);
+        Task<ServiceResult> GrantRole(string userId,params string[] roleNames);
 
-        Task<ServiceResult> RevokeRoles(IReadOnlyList<string> userIds, params string[] roleNames);
+        Task<ServiceResult> RevokeRole(string userId, params string[] roleNames);
     }
 }

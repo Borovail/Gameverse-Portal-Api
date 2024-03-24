@@ -2,6 +2,7 @@
 using Back_End.Models.BugModes;
 using Back_End.Services.Interfaces;
 using Back_End.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,13 +35,34 @@ namespace Back_End.Controllers
         }
 
         // GET api/bug/5
-        [HttpGet("{id}")]
+        [HttpGet("bug-by-id{id}")]
         public async Task<IActionResult> GetBugById(string id)
         {
             var result = await _bugService.GetBugByIdAsync(id);
 
             return StatusCode(result.StatusCode, result.Data);
         }
+
+        // GET api/bug
+        [HttpGet("user-bug{id}")]
+        public async Task<IActionResult> GetUserBug(string userId)
+        {
+            var result = await _bugService.GetUserBug(userId);
+
+            return StatusCode(result.StatusCode, result.Data);
+        }
+
+        // GET api/bug
+        [Authorize]
+        [HttpGet("my-bugs")]
+        public async Task<IActionResult> GetMyBugs()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _bugService.GetUserBug(userId);
+
+            return StatusCode(result.StatusCode, result.Data);
+        }
+
 
         // POST api/<BugController>
         [HttpPost]
@@ -65,6 +87,15 @@ namespace Back_End.Controllers
         public async Task<IActionResult> DeleteBug(string id)
         {
             var result = await _bugService.DeleteBug(id);
+
+            return StatusCode(result.StatusCode, result.Data);
+        }
+
+        // DELETE api/<BugController>
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllBugs()
+        {
+            var result = await _bugService.DeleteAllBugs();
 
             return StatusCode(result.StatusCode, result.Data);
         }
