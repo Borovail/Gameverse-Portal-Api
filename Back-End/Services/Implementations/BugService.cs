@@ -10,85 +10,70 @@ namespace Back_End.Services.Implementations
     public class BugService : IBugService
     {
         private readonly ApiDbContext _apiDbContext;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public BugService(ApiDbContext apiDbContext, UserManager<IdentityUser> userManager)
+        public BugService(ApiDbContext apiDbContext)
         {
             _apiDbContext = apiDbContext;
-            _userManager = userManager;
         }
 
-        public async Task<ServiceResult> CreateBug(CreateBugModel bugModel)
+        public async Task<ApiResponseBuilder> GetBugsAsync()
+        {
+            var bugs = await _apiDbContext.Bugs.AsNoTracking().ToListAsync();
+
+            if (bugs == null)
+                return new ApiResponseBuilder().FailureResponse(404)
+                  .SetErrors(new List<string> { "No bugs found" });
+
+            return new ApiResponseBuilder().SuccessResponse().AddData("bugs", bugs);
+
+
+        }
+
+        public async Task<ApiResponseBuilder> GetUserBug(string userId)
+        {
+            var bugs = await _apiDbContext.Bugs.Where(i => i.UserId == userId).AsNoTracking().ToListAsync();
+
+            if (bugs == null)
+                return new ApiResponseBuilder().FailureResponse(404).SetErrors(["No bugs found"]);
+
+            return  new ApiResponseBuilder().SuccessResponse().AddData("bugs", bugs);
+        }
+
+        public async Task<ApiResponseBuilder> GetBugByIdAsync(string id)
+        {
+            var bug = await _apiDbContext.Bugs.FirstOrDefaultAsync(i => i.Id == id);
+
+            if (bug == null)
+                return  new ApiResponseBuilder().FailureResponse(404).SetErrors(["Bug not found"]);
+
+            return new ApiResponseBuilder().SuccessResponse().AddData("bug", bug);
+        }
+
+
+
+        public async Task<ApiResponseBuilder> CreateBug(CreateBugModel bugModel)
         {
             BugModel bug = new BugModel
             {
                 Title = bugModel.Title,
                 Description = bugModel.Description,
                 Status = bugModel.Status,
+                UserId = bugModel.UserId
             };
 
             await _apiDbContext.Bugs.AddAsync(bug);
             await _apiDbContext.SaveChangesAsync();
 
-            return ServiceResult.SuccessResult("Success");
+            return new ApiResponseBuilder().SuccessResponse();
         }
 
-        public async Task<ServiceResult> DeleteAllBugs()
-        {
-            var count = await _apiDbContext.Bugs.ExecuteDeleteAsync();   
 
-            return ServiceResult.SuccessResult($"Success!\nDeleted {count} bugs");
-        }
-
-        public async Task<ServiceResult> DeleteBug(string id)
+        public async Task<ApiResponseBuilder> UpdateBug(string id, UpdateBugModel bugModel)
         {
             var bug = await _apiDbContext.Bugs.FirstOrDefaultAsync(i => i.Id == id);
 
-            if (bug == null) return ServiceResult.FailureResult("Bug not found", 404);
-
-
-            _apiDbContext.Bugs.Remove(bug);
-            await _apiDbContext.SaveChangesAsync();
-
-
-            return ServiceResult.SuccessResult("Success");
-        }
-
-        public async Task<ServiceResult> GetBugByIdAsync(string id)
-        {
-            var bug = await _apiDbContext.Bugs.FirstOrDefaultAsync(i => i.Id == id);
-
-            if (bug == null)
-                return ServiceResult.FailureResult("Bug not found", 404);
-
-            return ServiceResult.SuccessResult(bug);
-        }
-
-        public async Task<ServiceResult> GetBugsAsync()
-        {
-            var bugs = await _apiDbContext.Bugs.AsNoTracking().ToListAsync();
-
-            if (bugs == null)
-                return ServiceResult.FailureResult("No bugs found", 404);
-
-            return ServiceResult.SuccessResult(bugs);
-        }
-
-        public async Task<ServiceResult> GetUserBug(string userId)
-        {
-            var bugs = await _apiDbContext.Bugs.Where(i => i.UserId == userId).AsNoTracking().ToListAsync();
-
-            if (bugs == null)
-                return ServiceResult.FailureResult("No bugs found", 404);
-
-            return ServiceResult.SuccessResult(bugs);
-        }
-
-        public async Task<ServiceResult> UpdateBug(string id, UpdateBugModel bugModel)
-        {
-            var bug = await _apiDbContext.Bugs.FirstOrDefaultAsync(i => i.Id == id);
-
-            if (bug == null) return ServiceResult.FailureResult("Bug not found", 404);
+            if (bug == null) 
+                return new ApiResponseBuilder().FailureResponse(404).SetErrors(["Bug not found"]);
 
 
             bug.Title = bugModel.Title ?? bug.Title;
@@ -98,7 +83,37 @@ namespace Back_End.Services.Implementations
             _apiDbContext.Bugs.Update(bug);
             await _apiDbContext.SaveChangesAsync();
 
-            return ServiceResult.SuccessResult("Success");
+            return new ApiResponseBuilder().SuccessResponse();
         }
+
+
+        public async Task<ApiResponseBuilder> DeleteAllBugs()
+        {
+            var count = await _apiDbContext.Bugs.ExecuteDeleteAsync();
+
+            return  new ApiResponseBuilder().SuccessResponse().AddData("count", count);
+
+                
+               
+        }
+
+        public async Task<ApiResponseBuilder> DeleteBug(string id)
+        {
+            var bug = await _apiDbContext.Bugs.FirstOrDefaultAsync(i => i.Id == id);
+
+            if (bug == null) 
+                return new ApiResponseBuilder().FailureResponse(404).SetErrors(["Bug not found"]);
+
+            _apiDbContext.Bugs.Remove(bug);
+            await _apiDbContext.SaveChangesAsync();
+
+
+            return new ApiResponseBuilder().SuccessResponse();
+        }
+
+  
+
+       
+       
     }
 }

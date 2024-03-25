@@ -5,10 +5,10 @@ namespace Back_End.Services.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task <ServiceResult> Login(LoginModel model);
+        Task <ApiResponseBuilder> Login(LoginModel model);
 
-        Task <ServiceResult> Register(RegisterModel model);
+        Task <ApiResponseBuilder> Register(RegisterModel model);
 
-        Task <ServiceResult> RegisterAsGuest(string? Nickname = null);
+        Task <ApiResponseBuilder> RegisterAsGuest(string? Nickname = null);
     }
 }

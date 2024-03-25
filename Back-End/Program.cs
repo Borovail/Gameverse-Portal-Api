@@ -1,11 +1,21 @@
 ﻿using Back_End.Middleware;
 using Back_End.Utils;
 using Back_End.Extensions;
+using Back_End.Services.Interfaces;
+using Back_End.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// Extract to an extension method
 // Registering custom JWT token service
 builder.Services.AddScoped<JwtToken>();
+builder.Services.AddScoped<IBugService,BugService>();
+builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAccessService, AccessService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+
 
 // Adding custom service extensions to the container
 builder.Services

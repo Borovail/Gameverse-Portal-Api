@@ -4,10 +4,10 @@ namespace Back_End.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<ServiceResult> DeleteAccount();
+        Task<ApiResponseBuilder> DeleteAccount();
 
-        Task<ServiceResult> ChangeNickname(string newNickname);
-        Task<ServiceResult> ChangeEmail(string newEmail);
-        Task<ServiceResult> ChangePassword(string newPassword);
+        Task<ApiResponseBuilder> ChangeNickname(string newNickname);
+        Task<ApiResponseBuilder> ChangeEmail(string newEmail);
+        Task<ApiResponseBuilder> ChangePassword(string newPassword);
     }
 }

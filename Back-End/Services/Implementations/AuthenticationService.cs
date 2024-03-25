@@ -16,7 +16,7 @@ namespace Back_End.Services.Implementations
             _tokenService = tokenService;
         }
 
-        public async Task<ServiceResult> Login(LoginModel model)
+        public async Task<ApiResponseBuilder> Login(LoginModel model)
         {
             IdentityUser user = null;
             string message = null;
@@ -25,13 +25,15 @@ namespace Back_End.Services.Implementations
             {
                 user = await _userManager.FindByEmailAsync(model.Login);
                 if (user == null)
-                    return ServiceResult.FailureResult($"User with email {model.Login} not found", 404);
+                    return new ApiResponseBuilder().FailureResponse(404)
+                        .SetErrors([$"User with email {model.Login} not found" ]);
             }
             else
             {
                 user = await _userManager.FindByNameAsync(model.Login);
                 if (user == null)
-                    return ServiceResult.FailureResult($"User with name {model.Login} not found", 404);
+                    return new ApiResponseBuilder().FailureResponse(404)
+                        .SetErrors([$"User with username {model.Login} not found" ]);
             }
 
 
@@ -39,23 +41,24 @@ namespace Back_End.Services.Implementations
 
             var token = _tokenService.GenerateToken(user.Id, roles);
 
-            return ServiceResult.SuccessResult(token);
+            return new ApiResponseBuilder().SuccessResponse().AddData("token", token);
 
         }
 
-        public async Task<ServiceResult> Register(RegisterModel model)
+        public async Task<ApiResponseBuilder> Register(RegisterModel model)
         {
             var user = new IdentityUser { UserName = model.Name, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            if (!result.Succeeded) return ServiceResult.FailureResult(result.Errors);
+            if (!result.Succeeded) return new ApiResponseBuilder().FailureResponse()
+                .SetErrors(result.Errors.Select(e => e.Description).ToList());
 
             var token = _tokenService.GenerateToken(user.Id, "User");
 
-            return ServiceResult.SuccessResult(token);
+            return new ApiResponseBuilder().SuccessResponse().AddData("token", token);
         }
 
-        public async Task<ServiceResult> RegisterAsGuest(string? Nickname)
+        public async Task<ApiResponseBuilder> RegisterAsGuest(string? Nickname)
         {
             throw new NotImplementedException();
         }
