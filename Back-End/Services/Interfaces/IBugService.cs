@@ -10,7 +10,7 @@ namespace Back_End.Services.Interfaces
 
         Task<ApiResponseBuilder> GetBugByIdAsync(string bugIds);
 
-        Task<ApiResponseBuilder> CreateBug(CreateBugModel bugModel);
+        Task<ApiResponseBuilder> CreateBug(string userId,CreateBugModel bugModel);
 
         Task<ApiResponseBuilder> UpdateBug(string id, UpdateBugModel bugModel);
 

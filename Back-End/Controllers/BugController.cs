@@ -66,10 +66,13 @@ namespace Back_End.Controllers
 
 
         // POST api/<BugController>
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateBug([FromBody] CreateBugModel bugModel)
         {
-            var response = await _bugService.CreateBug(bugModel);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var response = await _bugService.CreateBug(userId,bugModel);
 
             return StatusCode(response.StatusCode, response.Build());
         }

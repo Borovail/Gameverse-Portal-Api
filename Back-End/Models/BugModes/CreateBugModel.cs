@@ -12,9 +12,6 @@ namespace Back_End.Models.BugModes
         public string? ImageUrl { get; set; }
 
         [Required]
-        public string UserId { get; set; }
-
-        [Required]
         public string Status { get; set; }
     }
 }

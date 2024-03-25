@@ -51,14 +51,14 @@ namespace Back_End.Services.Implementations
 
 
 
-        public async Task<ApiResponseBuilder> CreateBug(CreateBugModel bugModel)
+        public async Task<ApiResponseBuilder> CreateBug(string userId,CreateBugModel bugModel)
         {
             BugModel bug = new BugModel
             {
                 Title = bugModel.Title,
                 Description = bugModel.Description,
                 Status = bugModel.Status,
-                UserId = bugModel.UserId
+                UserId = userId
             };
 
             await _apiDbContext.Bugs.AddAsync(bug);
