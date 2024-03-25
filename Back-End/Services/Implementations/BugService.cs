@@ -64,14 +64,21 @@ namespace Back_End.Services.Implementations
             return ServiceResult.SuccessResult(bug);
         }
 
-        public async Task<ServiceResult> GetBugsAsync()
+        public async Task<ServiceResponse> GetBugsAsync()
         {
             var bugs = await _apiDbContext.Bugs.AsNoTracking().ToListAsync();
 
             if (bugs == null)
-                return ServiceResult.FailureResult("No bugs found", 404);
+                return new ApiResponseBuilder()
+                    .SetStatusCode(404)
+                    .SetErrors(new List<string> { "No bugs found" })
+                    .Build();
 
-            return ServiceResult.SuccessResult(bugs);
+               return new ApiResponseBuilder()
+                    .SetStatusCode(200)
+                    .AddData("message", "Success")
+                    .AddData("bugs", bugs)
+                    .Build();
         }
 
         public async Task<ServiceResult> GetUserBug(string userId)

@@ -1,11 +1,15 @@
 ﻿using Back_End.Middleware;
 using Back_End.Utils;
 using Back_End.Extensions;
+using Back_End.Services.Interfaces;
+using Back_End.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Registering custom JWT token service
 builder.Services.AddScoped<JwtToken>();
+builder.Services.AddScoped<IBugService,BugService>();
+
 
 // Adding custom service extensions to the container
 builder.Services
@@ -51,3 +55,7 @@ app.MapControllers();
 
 // Starting the application
 app.Run();
+
+
+
+public partial class Program { }

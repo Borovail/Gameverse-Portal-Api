@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Back_End.Controllers
 {
@@ -26,16 +27,16 @@ namespace Back_End.Controllers
         }
 
         // GET: api/bug
-        [HttpGet]
+        [HttpGet("bugs")]
         public async Task<IActionResult> GetBugs()
         {
-            var result =await _bugService.GetBugsAsync();
+            var result = await _bugService.GetBugsAsync();
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(result.StatusCode, result.Build());
         }
 
         // GET api/bug/5
-        [HttpGet("bug-by-id{id}")]
+        [HttpGet("bug-by-id/{id}")]
         public async Task<IActionResult> GetBugById(string id)
         {
             var result = await _bugService.GetBugByIdAsync(id);

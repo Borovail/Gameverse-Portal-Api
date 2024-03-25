@@ -5,7 +5,7 @@ namespace Back_End.Services.Interfaces
 {
     public interface IBugService
     {
-        Task<ServiceResult> GetBugsAsync();
+        Task<ServiceResponse> GetBugsAsync();
         Task<ServiceResult> GetUserBug(string userId);
 
         Task<ServiceResult> GetBugByIdAsync(string bugIds);
