@@ -28,7 +28,7 @@ namespace Back_End.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
               var result = await _authenticationService.Login(model);
-              return StatusCode(result.StatusCode, result.Data);
+              return StatusCode(result.StatusCode, result.Build());
         }
 
 
@@ -36,7 +36,7 @@ namespace Back_End.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             var result = await _authenticationService.Register(model);
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(result.StatusCode, result.Build());
         }
 
 
