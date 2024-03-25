@@ -1,4 +1,5 @@
-﻿using Back_End.Data;
+﻿using Azure;
+using Back_End.Data;
 using Back_End.Models.BugModes;
 using Back_End.Services.Interfaces;
 using Back_End.Utils;
@@ -29,27 +30,27 @@ namespace Back_End.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBugs()
         {
-            var result =await _bugService.GetBugsAsync();
+            var response =await _bugService.GetBugsAsync();
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(response.StatusCode, response.Build());
         }
 
         // GET api/bug/5
         [HttpGet("bug-by-id{id}")]
         public async Task<IActionResult> GetBugById(string id)
         {
-            var result = await _bugService.GetBugByIdAsync(id);
+            var response = await _bugService.GetBugByIdAsync(id);
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(response.StatusCode, response.Build());
         }
 
         // GET api/bug
         [HttpGet("user-bug{id}")]
         public async Task<IActionResult> GetUserBug(string userId)
         {
-            var result = await _bugService.GetUserBug(userId);
+            var response = await _bugService.GetUserBug(userId);
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(response.StatusCode, response.Build());
         }
 
         // GET api/bug
@@ -58,9 +59,9 @@ namespace Back_End.Controllers
         public async Task<IActionResult> GetMyBugs()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = await _bugService.GetUserBug(userId);
+            var response = await _bugService.GetUserBug(userId);
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(response.StatusCode, response.Build());
         }
 
 
@@ -68,36 +69,36 @@ namespace Back_End.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBug([FromBody] CreateBugModel bugModel)
         {
-            var result = await _bugService.CreateBug(bugModel);
+            var response = await _bugService.CreateBug(bugModel);
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(response.StatusCode, response.Build());
         }
 
         // PUT api/<BugController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBug(string id, [FromBody] UpdateBugModel updateBugModel)
         {
-            var result = await _bugService.UpdateBug(id, updateBugModel);
+            var response = await _bugService.UpdateBug(id, updateBugModel);
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(response.StatusCode, response.Build());
         }
 
         // DELETE api/<BugController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBug(string id)
         {
-            var result = await _bugService.DeleteBug(id);
+            var response = await _bugService.DeleteBug(id);
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(response.StatusCode, response.Build());
         }
 
         // DELETE api/<BugController>
         [HttpDelete]
         public async Task<IActionResult> DeleteAllBugs()
         {
-            var result = await _bugService.DeleteAllBugs();
+            var response = await _bugService.DeleteAllBugs();
 
-            return StatusCode(result.StatusCode, result.Data);
+            return StatusCode(response.StatusCode, response.Build());
         }
     }
 }

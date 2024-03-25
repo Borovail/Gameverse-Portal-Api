@@ -6,32 +6,32 @@ namespace Back_End.Services.Implementations
 {
     public class UserService : IUserService
     {
-        public async Task<ServiceResult> CreateUserAsync(RegisterModel model)
+        public async Task<ApiResponseBuilder> CreateUserAsync(RegisterModel model)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResult> DeleteUserAsync(string id)
+        public async Task<ApiResponseBuilder> DeleteUserAsync(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResult> DeleteUsersAsync(IReadOnlyList<string> ids)
+        public async Task<ApiResponseBuilder> DeleteUsersAsync(IReadOnlyList<string> ids)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResult> GetUserAsync(string id)
+        public async Task<ApiResponseBuilder> GetUserAsync(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResult> GetUsersAsync()
+        public async Task<ApiResponseBuilder> GetUsersAsync()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResult> UpdateUserAsync(RegisterModel model)
+        public async Task<ApiResponseBuilder> UpdateUserAsync(RegisterModel model)
         {
             throw new NotImplementedException();
         }

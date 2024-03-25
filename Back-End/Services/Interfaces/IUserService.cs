@@ -5,15 +5,15 @@ namespace Back_End.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<ServiceResult> GetUserAsync(string id);
-        Task<ServiceResult> GetUsersAsync();
+        Task<ApiResponseBuilder> GetUserAsync(string id);
+        Task<ApiResponseBuilder> GetUsersAsync();
 
 
-        Task<ServiceResult> DeleteUserAsync(string id);
+        Task<ApiResponseBuilder> DeleteUserAsync(string id);
 
-        Task<ServiceResult> CreateUserAsync(RegisterModel model);
+        Task<ApiResponseBuilder> CreateUserAsync(RegisterModel model);
 
 
-        Task<ServiceResult> UpdateUserAsync(RegisterModel model);
+        Task<ApiResponseBuilder> UpdateUserAsync(RegisterModel model);
     }
 }
